@@ -14,7 +14,7 @@ export default function NavBar({user}){
     return(
         <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Navbar.Brand href="/">김 OJ</Navbar.Brand>
+          <Navbar.Brand href="/">리만 OJ</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">홈</Nav.Link>
             <Nav.Link href="/problems">문제</Nav.Link>

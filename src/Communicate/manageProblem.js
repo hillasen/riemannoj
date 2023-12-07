@@ -1,6 +1,6 @@
 import { fireAuth, fireStore, dataBase } from "../Firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { ref, child, push, update } from "firebase/database";
+import { ref, child, push, update, get } from "firebase/database";
 
 async function getProblem(id){
     console.log("ID:" + id)
@@ -32,4 +32,17 @@ async function submitProblem(problem, code){
     update(ref(dataBase), updates);
 }
 
-export {getProblem, submitProblem};
+async function getJudgeResultList(){
+    const dbRef = ref(dataBase);
+    let snapshot = await get(child(dbRef, `judgeresults`))
+    if(snapshot.exists()){
+        return snapshot.val();
+    }
+    else{
+        console.log("No Data")
+        return null;
+    }
+
+}
+
+export {getProblem, submitProblem, getJudgeResultList, getProblemList};
