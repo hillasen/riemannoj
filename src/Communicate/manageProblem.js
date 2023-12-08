@@ -23,13 +23,19 @@ async function getProblemList(){
 }
 
 async function submitProblem(problem, code){
-    const sendData = {problemId: problem.id, language: "cpp", code: code, user: "test@test.com", memory: problem.memory, time: problem.time}
-    const newProblemQueueKey = push(child(ref(dataBase), 'judgequeue')).key;
-
-    const updates = {};
-    updates['/judgequeue/' + newProblemQueueKey] = sendData;
-
-    update(ref(dataBase), updates);
+    const user = fireAuth.currentUser
+    if(user != null){
+        const sendData = {problemId: problem.id, language: "cpp", code: code, user: user.email, memory: problem.memory, time: problem.time}
+        const newProblemQueueKey = push(child(ref(dataBase), 'judgequeue')).key;
+    
+        const updates = {};
+        updates['/judgequeue/' + newProblemQueueKey] = sendData;
+    
+        update(ref(dataBase), updates);
+    }
+    else{
+        console.log("User must login to submit problem")
+    }
 }
 
 async function getJudgeResultList(){

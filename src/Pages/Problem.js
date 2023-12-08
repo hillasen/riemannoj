@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import queryString from 'query-string';
-
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocatio, useNavigate } from "react-router-dom";
+import { fireAuth } from "../Firebase";
 
 import { getProblem, submitProblem } from "../Communicate/manageProblem";
 
@@ -12,6 +12,7 @@ export default function Problem(){
     const [problem, setProblem] = useState({});
     const [problemloaded, setProblemloaded] = useState(false);
     const [code, setCode] = useState(false);
+    const navigate = useNavigate();
 
     let { problemid } = useParams(); //router 에 추가한것과 이름이 일치해야함!
 
@@ -30,7 +31,13 @@ export default function Problem(){
     }
 
     async function codeSubmit(){
-        await submitProblem(problem, code);
+        if(fireAuth.currentUser != null){
+            await submitProblem(problem, code);
+        }
+        else{
+            alert("제출을 위해선 로그인이 필요합니다!")
+            navigate("/login")
+        }
     }
 
     getProblemFromDb()

@@ -21,12 +21,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { loginUser, logoutUser } from './Communicate/Auth';
 
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home/>
-  }
-])
 
 function App() {
   const [user, setUser] = useState({});
