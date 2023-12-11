@@ -1,5 +1,5 @@
 import { fireAuth, fireStore, dataBase } from "../Firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, setDoc } from "firebase/firestore";
 import { ref, child, push, update, get } from "firebase/database";
 
 async function getProblem(id){
@@ -8,7 +8,7 @@ async function getProblem(id){
     const docRef = doc(fireStore, "problems", id);
     const problem = await getDoc(docRef)
 
-    if (!problem.exists) {
+    if (!problem.exists()) {
         console.log('No such problem');
         return null;
     }
@@ -19,13 +19,19 @@ async function getProblem(id){
 }
 
 async function getProblemList(){
-
+    async function getAuthority(){
+        const querySnapshot = await getDocs(collection(fireStore, "problems"));
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
+    }
 }
 
-async function submitProblem(problem, code){
+async function submitProblem(problem, code, contest, subtask, score){
     const user = fireAuth.currentUser
     if(user != null){
-        const sendData = {problemId: problem.id, language: "cpp", code: code, user: user.email, memory: problem.memory, time: problem.time}
+        const sendData = {problemId: problem.id, language: "cpp", code: code, user: user.email, memory: problem.memory, time: problem.time, contest: contest, subtask: subtask, score:score}
         const newProblemQueueKey = push(child(ref(dataBase), 'judgequeue')).key;
     
         const updates = {};
@@ -51,4 +57,37 @@ async function getJudgeResultList(){
 
 }
 
-export {getProblem, submitProblem, getJudgeResultList, getProblemList};
+async function getContest(id){
+    console.log("ID:" + id)
+    
+    const docRef = doc(fireStore, "contests", id);
+    const contest = await getDoc(docRef)
+
+    if (!contest.exists()) {
+        console.log('No such problem');
+        return null;
+    }
+    else{
+        console.log(contest.data())
+        return contest.data();
+    }
+}
+
+async function isProblemExists(id){
+    
+    const docRef = doc(fireStore, "problems", id);
+    const problem = await getDoc(docRef)
+    if (!problem.exists()) {
+        console.log("WW")
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+async function addProblem(problem){
+    await setDoc(doc(fireStore, "problems", problem.id), problem);
+}
+
+export {getProblem, submitProblem, getJudgeResultList, getProblemList, getContest, isProblemExists, addProblem};

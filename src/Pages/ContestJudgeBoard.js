@@ -4,17 +4,21 @@ import { useState } from "react";
 import { getJudgeResultList } from "../Communicate/manageProblem";
 
 import { fireAuth, dataBase } from "../Firebase";
-import { ref, onValue, query, orderByChild } from "firebase/database";
+import { ref, onValue, query, orderByChild, equalTo } from "firebase/database";
 
 import Table from 'react-bootstrap/Table';
+import { useParams } from "react-router-dom";
 
-export default function JudgeBoard(){
+export default function ContestJudgeBoard(){
     const [judgeResults, setJudgeResults] = useState({});
     const [isResultsLoaded, setisResultsLoaded] = useState(false);
+    let {contestid} = useParams()
+
     const [board, setBoard] = useState("");
     const [queueboard, setqueueBoard] = useState("");
-    const judgeRef = ref(dataBase, 'judgeresults');
-    const judgequeueRef = ref(dataBase, 'judgequeue');
+    const judgeRef = query(ref(dataBase, 'judgeresults'), orderByChild('contest'), equalTo(contestid));
+    const judgequeueRef = query(ref(dataBase, 'judgequeue'), orderByChild('contest'), equalTo(contestid));
+
     
     useEffect(() => {
         onValue(judgeRef, (snapshot) => {
@@ -47,10 +51,9 @@ export default function JudgeBoard(){
         }
         setqueueBoard(<><Table bordered hover> <thead><tr> <th>제출자</th> <th>문제 번호</th> <th>서브테스크 번호</th>  </tr> </thead> <tbody>{tboard}</tbody></Table></>);
     }
-
     return(
         <div>
-        <h1>Judge Results Board!</h1>
+        <h1>{contestid} Judge Results Board!</h1>
         <h5>채점 대기 큐</h5>
         {queueboard}
         <h5>채점 결과</h5>
