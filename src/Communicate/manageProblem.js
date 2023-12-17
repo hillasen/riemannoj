@@ -1,6 +1,7 @@
 import { fireAuth, fireStore, dataBase } from "../Firebase";
 import { doc, getDoc, getDocs, collection, setDoc } from "firebase/firestore";
 import { ref, child, push, update, get } from "firebase/database";
+import { getName } from "./Auth";
 
 async function getProblem(id){
     console.log("ID:" + id)
@@ -29,9 +30,10 @@ async function getProblemList(){
 }
 
 async function submitProblem(problem, code, contest, subtask, score){
+    let name = await getName();
     const user = fireAuth.currentUser
     if(user != null){
-        const sendData = {problemId: problem.id, language: "cpp", code: code, user: user.email, memory: problem.memory, time: problem.time, contest: contest, subtask: subtask, score:score}
+        const sendData = {problemId: problem.id, language: "cpp", code: code, user: name, memory: problem.memory, time: problem.time, contest: contest, subtask: subtask, score:score}
         const newProblemQueueKey = push(child(ref(dataBase), 'judgequeue')).key;
     
         const updates = {};

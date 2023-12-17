@@ -1,8 +1,10 @@
 import { useState, React, useEffect } from "react";
-import { fireAuth, fireStore } from "../Firebase";
+import { fireAuth, fireStore, storage } from "../Firebase";
 import { getAuthority } from "../Communicate/Auth";
 import { isProblemExists, addProblem } from "../Communicate/manageProblem";
 import { useNavigate } from "react-router-dom";
+
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import AuthorityChecking from "../Components/AuthorityChecking";
 import LowAuthority from "../Components/LowAuthority";
@@ -20,7 +22,7 @@ export default function CreateProblem({useremail}){
           container: [
             ["image"],
             [{ header: [1, 2, 3, 4, 5, false] }],
-            ["bold", "underline"],
+            ["bold", "underline" , "italic", "strike"],
           ],
         },
       };
@@ -124,7 +126,7 @@ export default function CreateProblem({useremail}){
                         <Form.Label>문제 설명</Form.Label>
                         <ReactQuill
                         style={{ width: "100%", height: "500px" }}
-                        onChange={(contents) => {setProbleminfo(contents); console.log(contents)}}
+                        onChange={(contents) => {setProbleminfo(contents);}}
                         modules={modules}
                          />
                     </Form.Group>
