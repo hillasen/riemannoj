@@ -19,7 +19,6 @@ export default function NavBar({user}){
           <Navbar.Brand href="/">리만 OJ</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">홈</Nav.Link>
-            <Nav.Link href="/problems">문제</Nav.Link>
             <Nav.Link href="/contests">대회</Nav.Link>
             <Nav.Link href="/judgeboard">채점 현황</Nav.Link>
             {userMenu}

@@ -61,6 +61,20 @@ export default function ContestRanking(){
         return totalScore;
     }
 
+    function totalCorrected(array, targetName) {
+        let corrected = []
+      
+        for (let i = 0; i < array.length; i++) {
+          const item = array[i];
+          console.log(item)
+          if (item.user === targetName && item.result === 'Correct' && corrected.indexOf(item.problemId) == -1) {
+            corrected.push(item.problemId);
+          }
+        }
+      
+        return corrected
+    }
+
     function sumSubmitted(array, targetName) {
         let totalSubmitted = 0;
       
@@ -94,10 +108,10 @@ export default function ContestRanking(){
             if(i != 0 && (res[i-1].score != res[i].score || res[i-1].submittedCount != res[i].submittedCount)){
                 rankCount += 1;
             }
-            let tmp = <><tr> <td>{rankCount}</td><td>{res[i].user}</td> <td>{res[i].score}</td>  <td>{res[i].submittedCount}</td> </tr></>
+            let tmp = <><tr> <td>{rankCount}</td><td>{res[i].user}</td> <td>{res[i].score}</td>  <td>{res[i].submittedCount}</td>  <td>{res[i].corrected.toString()}</td>  </tr></>
             tboard = <>{tboard}{tmp}</>;
         }
-        setRankboard(<><Table bordered hover> <thead><tr><th>순위</th> <th>사용자</th> <th>점수</th> <th>제출횟수</th>  </tr> </thead> <tbody>{tboard}</tbody></Table></>);
+        setRankboard(<><Table bordered hover> <thead><tr><th>순위</th> <th>사용자</th> <th>점수</th> <th>제출횟수</th>  <th>해결한 문제</th> </tr> </thead> <tbody>{tboard}</tbody></Table></>);
     }
 
     function calculateRankings(submissionRecords){
@@ -111,8 +125,10 @@ export default function ContestRanking(){
             let data = {
                 user: participants[i],
                 score: sumScoresByNameAndResult(deleted, participants[i]),
-                submittedCount: sumSubmitted(deleted, participants[i])
+                submittedCount: sumSubmitted(deleted, participants[i]),
+                corrected: totalCorrected(deleted, participants[i])
             };
+            console.log(data)
             scoreResult.push(data)
         }
         scoreResult.sort(compareFunction);

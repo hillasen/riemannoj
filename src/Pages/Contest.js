@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { getContest, getProblem } from "../Communicate/manageProblem";
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
+
 
 export default function Contest(){
     const navigate = useNavigate();
@@ -18,6 +20,14 @@ export default function Contest(){
 
     function problemMover(id){
         navigate("/problem/" + id + "/" + contestid);
+    }
+
+    function rankingMover(){
+        navigate("/ranking/" + contestid);
+    }
+
+    function judgeMover(){
+        navigate("/judgeboard/" + contestid);
     }
 
     useEffect(() => {
@@ -79,6 +89,8 @@ export default function Contest(){
         <>
             <h1>{contest.name}</h1>
             <h4>{contest.info}</h4>
+            <Button variant="primary" onClick={rankingMover}>랭킹</Button>
+            <Button variant="primary" onClick={judgeMover}>채점기록</Button>
             <h4>시작: {startTime.toString()}</h4>
             <h4>종료: {endTime.toString()}</h4>
             {problems}

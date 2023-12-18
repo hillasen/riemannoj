@@ -18,6 +18,7 @@ import ContestProblem from './Pages/ContestProblem';
 import ContestRanking from './Pages/ContestRanking';
 import CreateProblem from "./Pages/CreateProblem"
 import CreateUser from './Pages/CreateUser';
+import Contests from './Pages/Contests';
 
 import { useEffect, useState } from "react";
 import { fireStore, fireAuth } from "./Firebase";
@@ -55,7 +56,9 @@ function App() {
           <Route path="/contest/:contestid" element={<Contest />}></Route>
           <Route path="/createproblem" element={<CreateProblem  />}></Route>
           <Route path="/createuser" element={<CreateUser />}></Route>
+          <Route path="/contests" element={<Contests />}></Route>
           <Route path="*" element={<NotFound/>}></Route>
+  
         </Routes>
       </BrowserRouter>
     </div>

@@ -83,6 +83,7 @@ export default function Problem(){
     return (
         <div>
         <h1>{problem.name}</h1>
+        <p>시간제한: {problem.time}초 / 메모리 제한: {problem.memory}MB</p>
         <h4>문제</h4>
         <div dangerouslySetInnerHTML={ {__html: problem.problem} }></div>
         <h4>입력</h4>

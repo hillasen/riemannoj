@@ -30,6 +30,14 @@ async function getProblemList(){
 }
 
 async function submitProblem(problem, code, contest, subtask, score){
+    if(contest != ""){
+        let conte = await getContest(contest);
+        const currentTime = new Date().getTime();
+        if(conte.end.seconds *1000 < currentTime){
+            alert("대회가 종료되었습니다!");
+            return 0;
+        }
+    }
     let name = await getName();
     const user = fireAuth.currentUser
     if(user != null){
